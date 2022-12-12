@@ -66,13 +66,13 @@ importers:
       vite: ^3.2.5
       vitest: 0.25.5
     dependencies:
+      '@babel/core': 7.20.5
       '@esbuild-plugins/node-modules-polyfill': 0.1.4_esbuild@0.16.4
       '@remix-run/dev': 1.8.2
       esbuild: 0.16.4
       fs-extra: 11.1.0
     devDependencies:
       '@babel/cli': 7.19.3_@babel+core@7.20.5
-      '@babel/core': 7.20.5
       '@babel/plugin-transform-modules-commonjs': 7.19.6_@babel+core@7.20.5
       '@changesets/changelog-github': 0.4.7
       '@changesets/cli': 2.25.2
