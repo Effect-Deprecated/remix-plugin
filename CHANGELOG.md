@@ -1,5 +1,11 @@
 # @effect/remix-plugin
 
+## 0.0.3
+
+### Patch Changes
+
+- [`53eff61`](https://github.com/Effect-TS/remix-plugin/commit/53eff61f7a43503ca56db2063502a009c103b22c) Thanks [@mikearnaldi](https://github.com/mikearnaldi)! - Add babel to dependencies
+
 ## 0.0.2
 
 ### Patch Changes
