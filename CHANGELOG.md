@@ -1,5 +1,11 @@
 # @effect/remix-plugin
 
+## 0.0.2
+
+### Patch Changes
+
+- [`c4c202d`](https://github.com/Effect-TS/remix-plugin/commit/c4c202d9fb91f85a603927cf53513174fc77febd) Thanks [@mikearnaldi](https://github.com/mikearnaldi)! - Switch to dependencies
+
 ## 0.0.1
 
 ### Patch Changes
