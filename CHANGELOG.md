@@ -1,5 +1,11 @@
 # @effect/remix-plugin
 
+## 0.0.4
+
+### Patch Changes
+
+- [#5](https://github.com/Effect-TS/remix-plugin/pull/5) [`cd6c495`](https://github.com/Effect-TS/remix-plugin/commit/cd6c495225c7aef69c45bc25e3897adbc1842c72) Thanks [@mikearnaldi](https://github.com/mikearnaldi)! - Fix package.json description
+
 ## 0.0.3
 
 ### Patch Changes
