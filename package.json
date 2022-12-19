@@ -18,7 +18,7 @@
     "url": "https://github.com/Effect-TS/remix-plugin/issues"
   },
   "homepage": "https://github.com/Effect-TS/remix-plugin",
-  "description": "A remix-plugin Plugin to Refactor and Diagnostic effect-ts projects",
+  "description": "A remix-plugin for effect-ts projects",
   "tags": [
     "typescript",
     "algebraic-data-types",
