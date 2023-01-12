@@ -156,7 +156,7 @@ export const effectPlugin = (): esbuild.Plugin => {
           if (!services) {
             services = init()
           }
-          build.onLoad({ filter: /(.ts|.tsx|.tsx?browser)$/ }, (args: any) => {
+          build.onLoad({ filter: /(\.ts|\.tsx|\.tsx?browser)$/ }, (args: any) => {
             const cached = fromCache(args.path)
             if (cached) {
               return {
@@ -181,7 +181,7 @@ export const effectPlugin = (): esbuild.Plugin => {
           if (!services) {
             services = init()
           }
-          build.onLoad({ filter: /(.ts|.tsx|.tsx?browser)$/ }, (args: any) => {
+          build.onLoad({ filter: /(\.ts|\.tsx|\.tsx?browser)$/ }, (args: any) => {
             const cached = fromCache(args.path)
             if (cached) {
               return {
@@ -195,7 +195,7 @@ export const effectPlugin = (): esbuild.Plugin => {
             }
           })
         } else if (useBabel) {
-          build.onLoad({ filter: /(.ts|.tsx|.tsx?browser)$/ }, (args: any) => {
+          build.onLoad({ filter: /(\.ts|\.tsx|\.tsx?browser)$/ }, (args: any) => {
             const cached = fromCache(args.path)
             if (cached) {
               return {
