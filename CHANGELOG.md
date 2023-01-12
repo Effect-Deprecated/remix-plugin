@@ -1,5 +1,11 @@
 # @effect/remix-plugin
 
+## 0.0.5
+
+### Patch Changes
+
+- [#7](https://github.com/Effect-TS/remix-plugin/pull/7) [`6202615`](https://github.com/Effect-TS/remix-plugin/commit/6202615ae2f3e6ee7909dfbf39c4bed5b93b9687) Thanks [@pigoz](https://github.com/pigoz)! - fix missing regexp escapes
+
 ## 0.0.4
 
 ### Patch Changes
