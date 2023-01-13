@@ -7,7 +7,7 @@ import ts from "typescript"
 const configPath = ts.findConfigFile("./", ts.sys.fileExists, "tsconfig.json")
 
 if (!configPath) {
-  throw new Error("Could not find a valid \"tsconfig.json\".")
+  throw new Error(`Could not find a valid "tsconfig.json".`)
 }
 
 const baseDir = nodePath.dirname(nodePath.resolve(configPath))
@@ -34,7 +34,10 @@ const getScriptVersion = (fileName: string): string => {
 }
 
 const init = () => {
-  const { config } = ts.parseConfigFileTextToJson(configPath, ts.sys.readFile(configPath)!)
+  const { config } = ts.parseConfigFileTextToJson(
+    configPath,
+    ts.sys.readFile(configPath)!
+  )
 
   Object.assign(config.compilerOptions, {
     sourceMap: false,
@@ -122,7 +125,9 @@ export const fromCache = (fileName: string) => {
     const hash = fs.readFileSync(path).toString("utf-8")
     if (hash === current) {
       return fs
-        .readFileSync(nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.content`))
+        .readFileSync(
+          nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.content`)
+        )
         .toString("utf-8")
     }
   }
@@ -132,7 +137,10 @@ export const toCache = (fileName: string, content: string) => {
   const current = getScriptVersion(fileName)
   const path = nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.hash`)
   fs.writeFileSync(path, current)
-  fs.writeFileSync(nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.content`), content)
+  fs.writeFileSync(
+    nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.content`),
+    content
+  )
   cache.set(fileName, { hash: current, content })
   return content
 }
