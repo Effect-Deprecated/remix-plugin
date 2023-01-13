@@ -166,7 +166,7 @@ export const effectPlugin = (): esbuild.Plugin => {
           }
           build.onLoad(
             { filter: /(\.ts|\.tsx|\.tsx?browser)$/ },
-            (args: esbuild.OnLoadArgs) => {
+            async (args: esbuild.OnLoadArgs) => {
               const cached = fromCache(args.path)
               if (cached) {
                 return {
@@ -174,7 +174,7 @@ export const effectPlugin = (): esbuild.Plugin => {
                   loader: "js"
                 }
               }
-              const result = babel.transformSync(getEmit(args.path), {
+              const result = await babel.transformAsync(getEmit(args.path), {
                 filename: args.path,
                 configFile: babelConfigPath,
                 sourceMaps: "inline"
@@ -211,7 +211,7 @@ export const effectPlugin = (): esbuild.Plugin => {
         } else if (useBabel) {
           build.onLoad(
             { filter: /(\.ts|\.tsx|\.tsx?browser)$/ },
-            (args: esbuild.OnLoadArgs) => {
+            async (args: esbuild.OnLoadArgs) => {
               const cached = fromCache(args.path)
               if (cached) {
                 return {
@@ -219,7 +219,7 @@ export const effectPlugin = (): esbuild.Plugin => {
                   loader: "js"
                 }
               }
-              const result = babel.transformFileSync(args.path, {
+              const result = await babel.transformFileAsync(args.path, {
                 configFile: babelConfigPath,
                 sourceMaps: "inline"
               })
