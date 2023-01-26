@@ -1,5 +1,11 @@
 # @effect/remix-plugin
 
+## 0.0.6
+
+### Patch Changes
+
+- [#9](https://github.com/Effect-TS/remix-plugin/pull/9) [`c2753bb`](https://github.com/Effect-TS/remix-plugin/commit/c2753bbf2745f631f9acc51160faa1743da523eb) Thanks [@pigoz](https://github.com/pigoz)! - make babel transforms async
+
 ## 0.0.5
 
 ### Patch Changes
