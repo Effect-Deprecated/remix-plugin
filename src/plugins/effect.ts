@@ -7,7 +7,7 @@ import ts from "typescript"
 const configPath = ts.findConfigFile("./", ts.sys.fileExists, "tsconfig.json")
 
 if (!configPath) {
-  throw new Error("Could not find a valid \"tsconfig.json\".")
+  throw new Error(`Could not find a valid "tsconfig.json".`)
 }
 
 const baseDir = nodePath.dirname(nodePath.resolve(configPath))
@@ -34,7 +34,10 @@ const getScriptVersion = (fileName: string): string => {
 }
 
 const init = () => {
-  const { config } = ts.parseConfigFileTextToJson(configPath, ts.sys.readFile(configPath)!)
+  const { config } = ts.parseConfigFileTextToJson(
+    configPath,
+    ts.sys.readFile(configPath)!
+  )
 
   Object.assign(config.compilerOptions, {
     sourceMap: false,
@@ -122,7 +125,9 @@ export const fromCache = (fileName: string) => {
     const hash = fs.readFileSync(path).toString("utf-8")
     if (hash === current) {
       return fs
-        .readFileSync(nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.content`))
+        .readFileSync(
+          nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.content`)
+        )
         .toString("utf-8")
     }
   }
@@ -132,7 +137,10 @@ export const toCache = (fileName: string, content: string) => {
   const current = getScriptVersion(fileName)
   const path = nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.hash`)
   fs.writeFileSync(path, current)
-  fs.writeFileSync(nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.content`), content)
+  fs.writeFileSync(
+    nodePath.join(cacheDir, `${ts.sys.createHash!(fileName)}.content`),
+    content
+  )
   cache.set(fileName, { hash: current, content })
   return content
 }
@@ -140,7 +148,7 @@ export const toCache = (fileName: string, content: string) => {
 export const effectPlugin = (): esbuild.Plugin => {
   return {
     name: "effect-plugin",
-    setup(build: any) {
+    setup(build: esbuild.PluginBuild) {
       if (baseDir) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const config = require(nodePath.join(baseDir!, "/remix.config.js"))
@@ -156,65 +164,74 @@ export const effectPlugin = (): esbuild.Plugin => {
           if (!services) {
             services = init()
           }
-          build.onLoad({ filter: /(\.ts|\.tsx|\.tsx?browser)$/ }, (args: any) => {
-            const cached = fromCache(args.path)
-            if (cached) {
-              return {
-                contents: cached,
-                loader: "js"
+          build.onLoad(
+            { filter: /(\.ts|\.tsx|\.tsx?browser)$/ },
+            async (args: esbuild.OnLoadArgs) => {
+              const cached = fromCache(args.path)
+              if (cached) {
+                return {
+                  contents: cached,
+                  loader: "js"
+                }
               }
-            }
-            const result = babel.transformSync(getEmit(args.path), {
-              filename: args.path,
-              configFile: babelConfigPath,
-              sourceMaps: "inline"
-            })
-            if (result?.code) {
-              return {
-                contents: toCache(args.path, result?.code),
-                loader: "js"
+              const result = await babel.transformAsync(getEmit(args.path), {
+                filename: args.path,
+                configFile: babelConfigPath,
+                sourceMaps: "inline"
+              })
+              if (result?.code) {
+                return {
+                  contents: toCache(args.path, result?.code),
+                  loader: "js"
+                }
               }
+              throw new Error(`Babel failed emit for file: ${args.path}`)
             }
-            throw new Error(`Babel failed emit for file: ${args.path}`)
-          })
+          )
         } else if (config.future && config.future.typescript) {
           if (!services) {
             services = init()
           }
-          build.onLoad({ filter: /(\.ts|\.tsx|\.tsx?browser)$/ }, (args: any) => {
-            const cached = fromCache(args.path)
-            if (cached) {
+          build.onLoad(
+            { filter: /(\.ts|\.tsx|\.tsx?browser)$/ },
+            (args: esbuild.OnLoadArgs) => {
+              const cached = fromCache(args.path)
+              if (cached) {
+                return {
+                  contents: cached,
+                  loader: "js"
+                }
+              }
               return {
-                contents: cached,
+                contents: toCache(args.path, getEmit(args.path)),
                 loader: "js"
               }
             }
-            return {
-              contents: toCache(args.path, getEmit(args.path)),
-              loader: "js"
-            }
-          })
+          )
         } else if (useBabel) {
-          build.onLoad({ filter: /(\.ts|\.tsx|\.tsx?browser)$/ }, (args: any) => {
-            const cached = fromCache(args.path)
-            if (cached) {
-              return {
-                contents: cached,
-                loader: "js"
+          build.onLoad(
+            { filter: /(\.ts|\.tsx|\.tsx?browser)$/ },
+            async (args: esbuild.OnLoadArgs) => {
+              const cached = fromCache(args.path)
+              if (cached) {
+                return {
+                  contents: cached,
+                  loader: "js"
+                }
               }
-            }
-            const result = babel.transformFileSync(args.path, {
-              configFile: babelConfigPath,
-              sourceMaps: "inline"
-            })
-            if (result?.code) {
-              return {
-                contents: toCache(args.path, result?.code),
-                loader: "js"
+              const result = await babel.transformFileAsync(args.path, {
+                configFile: babelConfigPath,
+                sourceMaps: "inline"
+              })
+              if (result?.code) {
+                return {
+                  contents: toCache(args.path, result?.code),
+                  loader: "js"
+                }
               }
+              throw new Error(`Babel failed emit for file: ${args.path}`)
             }
-            throw new Error(`Babel failed emit for file: ${args.path}`)
-          })
+          )
         }
       }
     }
